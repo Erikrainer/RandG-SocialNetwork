@@ -5,7 +5,10 @@ module.exports = {
     async getUsers ( req, res ) {
         try{
             const users = await User.find()
-            .select("-__v");
+            .select("-__v")
+            .populate("thoughts")
+            .populate("friends")
+
             res.json(users);
         }catch(error){
             res.status(500).json(error);
@@ -15,8 +18,10 @@ module.exports = {
     async getSingleUser ( req, res ) {
         try{
             const user = await User.findOne ({ _id: req.params.userId })
-            .select("-__v");
-
+            .select("-__v")
+            .populate("thoughts")
+            .populate("friends")
+            
         if(!user){
             return res.status(404).json(
                 {
