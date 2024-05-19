@@ -1,0 +1,17 @@
+{
+  "name": "randg-socialnetwork",
+  "version": "1.0.0",
+  "description": "![Github License](https://img.shields.io/badge/License-MIT-yellow.svg)",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "seed": "node utils/seed"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "mongoose": "^8.4.0"
+  }
+}
