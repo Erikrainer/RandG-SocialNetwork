@@ -1,11 +1,12 @@
-const { Thought, User } = require("../models");
+const { Thought, User, Reaction } = require("../models");
 
 
 module.exports = {
     // get all the thought
     async getThought ( req, res ) {
         try {
-            const thought = await Thought.find();
+            const thought = await Thought.find()
+            .populate("reactions");
             res.json(thought);
         } catch (error) {
             res.status(500).json(error);
@@ -14,8 +15,12 @@ module.exports = {
     //get a single thought
     async getSingleThought ( req, res ) {
         try {
-            const thought = await Thought.findOne ({ _id: req.params.thoughtId });
-
+            const thought = await Thought.findOne (
+                { 
+                _id: req.params.thoughtId 
+            }
+        )
+        .populate("reactions");
             if(!thought){
                 return res.status(404).json({ message: 'No thought with that ID' });
             }
@@ -47,5 +52,62 @@ module.exports = {
         console.log(err);
         res.status(500).json(err);
       }
+    },
+
+    // Select one thought and update
+    async updateThought ( req, res ) {
+        try{
+            const thought = await Thought.findOneAndUpdate(
+                {
+                    _id: req.params.userId,
+                },
+                {
+                    $set: req.body,
+                },
+                {
+                    runValidators: true,
+                    new: true,
+                },
+            );
+
+            if(!thought) {
+                return res.status(404).json(
+                    {
+                        message: "No thought with that ID!"
+                    }
+                )
+            };
+
+            res.status(200).json(thought);
+        }catch (error) {
+            res.status(500).json(error);
+        }
+    },
+
+    // delete on thought
+    async deleteThought ( req, res ) {
+        try{
+            const thought = await Thought.findOneAndDelete(
+                {
+                    _id: req.params.userId,
+                },
+            );
+
+            await Reaction.deleteMany({ _id: { $in: thought.reactions }});
+            if(!thought) {
+                return res.status(404).json(
+                    {
+                        message: "No thought with that ID!"
+                    }
+                )
+            };
+        res.satus(200).json(
+            {
+                message: "thoughts and all his reaction deleted!!"
+            }
+        );
+        }catch (error) {
+            res.status(500).json(error);
+        }
     },
 };

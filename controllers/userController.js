@@ -51,7 +51,7 @@ module.exports = {
     // select one user and update
     async updateUser ( req, res ) {
         try {
-            const user = await User.findeOneAndUpdate( 
+            const user = await User.findOneAndUpdate( 
             {
                 _id: req.params.userId,
             },
