@@ -4,7 +4,7 @@
   "description": "![Github License](https://img.shields.io/badge/License-MIT-yellow.svg)",
   "main": "index.js",
   "scripts": {
-    "start": "node index",
+    "start": "node server.js",
     "seed": "node utils/seed"
   },
   "keywords": [],

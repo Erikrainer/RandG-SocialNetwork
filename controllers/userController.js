@@ -6,8 +6,6 @@ module.exports = {
         try{
             const users = await User.find()
             .select("-__v")
-            .populate("thoughts")
-            .populate("friends")
 
             res.json(users);
         }catch(error){
@@ -17,14 +15,12 @@ module.exports = {
     // get a single user
     async getSingleUser ( req, res ) {
         try{
-            const user = await User.findOne (
+            const user = await User.findOne(
                 { 
                     _id: req.params.userId 
                 }
             )
             .select("-__v")
-            .populate("thoughts")
-            .populate("friends")
             
         if(!user){
             return res.status(404).json(
@@ -41,8 +37,8 @@ module.exports = {
     // create a new user
     async createUser ( req, res ) {
         try {
-            const dbUserData = await User.create ( req.body );
-            res.json(dbUserData);
+            const user = await User.create( req.body );
+            res.json(user);
         } catch (error) {
             res.status(500).json(error);
         }
@@ -114,7 +110,7 @@ module.exports = {
         try {
             const user = await User.findOneAndUpdate(
                 {
-                    _id: req.params.userId,
+                    _id: req.params.friendId,
                 },
                 {
                     $addToSet: {
@@ -144,7 +140,7 @@ module.exports = {
         try {
             const user = await User.findOneAndDelete(
                 {
-                    _id: req.params.userId,
+                    _id: req.params.friendId,
                 },
                 {
                     $pull: {

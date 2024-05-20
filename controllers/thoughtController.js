@@ -48,9 +48,8 @@ module.exports = {
         }
 
         res.json("Created the thought!");
-    } catch (err) {
-        console.log(err);
-        res.status(500).json(err);
+    } catch (error) {
+        res.status(500).json(error);
       }
     },
 
@@ -59,7 +58,7 @@ module.exports = {
         try{
             const thought = await Thought.findOneAndUpdate(
                 {
-                    _id: req.params.userId,
+                    _id: req.params.thoughtId,
                 },
                 {
                     $set: req.body,
@@ -89,11 +88,11 @@ module.exports = {
         try{
             const thought = await Thought.findOneAndDelete(
                 {
-                    _id: req.params.userId,
+                    _id: req.params.thoughtId,
                 },
             );
 
-            await Reaction.deleteMany({ _id: { $in: thought.reactions }});
+            // await Reaction.deleteMany({ _id: { $in: thought.reactions }});
             if(!thought) {
                 return res.status(404).json(
                     {
@@ -110,4 +109,41 @@ module.exports = {
             res.status(500).json(error);
         }
     },
+
+    async deleteReaction ( req, res ) {
+        try{
+            const reaction = await Reaction.findOneAndDelete(
+                {
+                    _id: req.params.reactionId,
+                },
+                {
+                    $pull: {
+                        reactions: req.params.reactionId,
+                    }
+                },
+                {
+                    new: true,
+                },
+            );
+            if(!reaction){
+                return res.status(404).json(
+                    {
+                        message: "No thought with that ID!"
+                    }
+                )
+            };
+            res.status(200).json(error);
+        }catch (error) {
+            res.status(500).json(error);
+        }
+    },
+
+    async createReaction ( req, res ) {
+        try{
+            const reaction = await Reaction.create( req.body );
+            res.json(reaction);
+        }catch (error) {
+            res.status(500).json(error);
+        }
+    }
 };
