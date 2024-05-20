@@ -17,7 +17,11 @@ module.exports = {
     // get a single user
     async getSingleUser ( req, res ) {
         try{
-            const user = await User.findOne ({ _id: req.params.userId })
+            const user = await User.findOne (
+                { 
+                    _id: req.params.userId 
+                }
+            )
             .select("-__v")
             .populate("thoughts")
             .populate("friends")
@@ -103,5 +107,64 @@ module.exports = {
         }catch (error) {
             res.status(500).json(error);
         }
-    }
+    },
+
+    // create a friend to the user
+    async createFriend ( req,res ) {
+        try {
+            const user = await User.findOneAndUpdate(
+                {
+                    _id: req.params.userId,
+                },
+                {
+                    $addToSet: {
+                        friends: req.params.friendId,
+                    }
+                },
+                {
+                    new: true,
+                },
+            );
+
+            if(!user){
+                return res.status(404).json(
+                    {
+                        message: "No user with that ID!"
+                    }
+                );
+            };
+            res.status(200).json(user);
+        }catch (error) {
+            res.status(500).json(error);
+        }
+    },
+
+    // delete one friend from the user
+    async deleteFriend ( req,res ) {
+        try {
+            const user = await User.findOneAndDelete(
+                {
+                    _id: req.params.userId,
+                },
+                {
+                    $pull: {
+                        friends: req.params.friendId,
+                    }
+                },
+                {
+                    new: true,
+                },
+            );
+            if(!user){
+               return res.status(404).json(
+                    {
+                        message: "No user with that ID!"
+                    }
+                );
+            };
+            res.status(200).json(user);
+        }catch (error) {
+            res.status(500).json(error);
+        }
+    },
 }; 
