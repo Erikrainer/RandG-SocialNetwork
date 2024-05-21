@@ -6,6 +6,8 @@ module.exports = {
         try{
             const users = await User.find()
             .select("-__v")
+            .populate("thoughts")
+            .populate("friends")
 
             res.json(users);
         }catch(error){
@@ -94,13 +96,14 @@ module.exports = {
 
             await Thought.deleteMany({ _id: { $in: user.thoughts }});
 
-            res.satus(200).json(
+            res.status(200).json(
                 {
                     message: "User and all his thoughts deleted!!"
                 }
             );
 
         }catch (error) {
+            console.log(error);
             res.status(500).json(error);
         }
     },
@@ -110,7 +113,7 @@ module.exports = {
         try {
             const user = await User.findOneAndUpdate(
                 {
-                    _id: req.params.friendId,
+                    _id: req.params.userId,
                 },
                 {
                     $addToSet: {
@@ -138,9 +141,9 @@ module.exports = {
     // delete one friend from the user
     async deleteFriend ( req,res ) {
         try {
-            const user = await User.findOneAndDelete(
+            const user = await User.findOneAndUpdate(
                 {
-                    _id: req.params.friendId,
+                    _id: req.params.userId,
                 },
                 {
                     $pull: {
@@ -160,6 +163,7 @@ module.exports = {
             };
             res.status(200).json(user);
         }catch (error) {
+            console.log(error);
             res.status(500).json(error);
         }
     },
