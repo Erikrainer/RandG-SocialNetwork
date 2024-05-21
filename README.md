@@ -22,16 +22,32 @@ My Challenge is to build an API for a social network web application where users
 
 ## Installations  💻
 
-Deployed link: TBD 
+Deployed link: https://youtu.be/9N03P2cJ-4g
 
 To install dependencies, run these commands:
 
-TBD
+```
+npm install
+```
+![Screenshot 2024-05-20 191908](https://github.com/Erikrainer/RandG-SocialNetwork/assets/160955635/f3b0396e-2d85-43b9-9da2-992f217a856e)
 
 ## Usage 🏆
 
-TBD
+1. Run ```npm run start``` to start the server
 
+![Screenshot 2024-05-20 191925](https://github.com/Erikrainer/RandG-SocialNetwork/assets/160955635/f04d89a6-fcb2-4f6f-8ec8-f7ffdc6e13d7)
+
+2. In insomnia you will have many Options
+3. USER/FRIEND
+4. /api/users - GET all users, CREATE an user
+5. /api/users/:userId - GET a singleUser, UPDATE an user or DELETE an user
+6. /api/users/:userId/friends/:friendId - CREATE an friend, or DELETE friends
+7. THOUGHT/REACTION
+8. /api/thoughts - GET all thoughts, create a thought
+9. /api/thoughts/:thoughtId - GET a single thought, UPDATE a thought or DELETE a thought
+10. /api/thoughts/:thoughtId/reactions - CREATE a reaction to a specific thought
+11. /api/thoughts/:thoughtId/reactions/:reactionId - DELETE a reaction from the thought
+    
 ## License 📛 
 
   Copyright @ MIT. All rights reserved.
@@ -49,9 +65,7 @@ TBD
 
 To run tests, run these commands:
 
-
 TBD
-
 
 ## Questions
 
